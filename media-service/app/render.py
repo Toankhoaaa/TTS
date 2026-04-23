@@ -183,28 +183,45 @@ class RenderService:
                 logger.error(f"[COMBINE] TTS file not found: {tts_path}")
                 raise Exception(f"TTS file not found for segment {i}: {tts_path}")
 
+            # Debug: log segment info
+            file_size = Path(tts_path).stat().st_size if Path(tts_path).exists() else 0
+            print(f"[COMBINE] Segment {i}: start={seg_start:.2f}s, delay={delay_ms}ms, file={tts_path}, size={file_size} bytes")
+
             # Calculate delay in milliseconds to place this TTS at correct start time
             delay_ms = int(seg_start * 1000)
             temp_delayed = output_path.parent / f"temp_delayed_{i:03d}.mp3"
             delayed_files.append(temp_delayed)
 
             # Use adelay to offset TTS to exact start position (in ms)
+            # Convert backslashes to forward slashes for FFmpeg
+            tts_path_str = str(tts_path).replace('\\', '/')
+            temp_delayed_str = str(temp_delayed).replace('\\', '/')
+            
             cmd = [
-                '-i', str(tts_path),
+                '-i', tts_path_str,
                 '-af', f'adelay={delay_ms}|{delay_ms}',
                 '-acodec', 'libmp3lame',
                 '-ab', '192k',
                 '-y',
-                str(temp_delayed)
+                temp_delayed_str
             ]
             success, _, stderr = self._run_ffmpeg(cmd)
             if not success:
-                # Skip FFmpeg version header, show actual error
-                actual_error = stderr
-                if 'built with' in stderr:
-                    parts = stderr.split('built with', 1)
-                    if len(parts) > 1:
-                        actual_error = parts[1]
+                # Extract actual error message from FFmpeg stderr
+                lines = stderr.strip().split('\n')
+                error_lines = []
+                skip_header = True
+                for line in lines:
+                    # Skip version/header lines, capture actual errors
+                    if any(x in line.lower() for x in ['error', 'invalid', 'failed', 'cannot', 'no such']):
+                        skip_header = False
+                    if not skip_header:
+                        error_lines.append(line)
+                    # Stop at "built with" line (end of header)
+                    if 'built with' in line.lower():
+                        break
+                
+                actual_error = ' '.join(error_lines[:5]) if error_lines else stderr[-500:]
                 logger.error(f"[COMBINE] adelay failed for segment {i}: {actual_error[:500]}")
                 raise Exception(f"Failed to delay segment {i}: {actual_error[:500]}")
 
