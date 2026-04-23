@@ -526,12 +526,14 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
                 temp_mixed = output_path.parent / "temp_mixed_audio.mp3"
                 temp_outputs.append(temp_mixed)
 
+                # Mix base audio (lowered) with voiceover at user-specified volume
+                orig_vol = 0.3  # Keep original audio at 30%
                 cmd = [
                     '-i', str(temp_video),
                     '-i', str(base_audio),
                     '-i', str(voiceover_path),
                     '-filter_complex',
-                    f'[1:a]volume=0.05[orig];[2:a]volume=1.2[voiced];[orig][voiced]amix=inputs=2:duration=longest[aout]',
+                    f'[1:a]volume={orig_vol}[orig];[2:a]volume={voiceover_volume}[voiced];[orig][voiced]amix=inputs=2:duration=longest[aout]',
                     '-map', '0:v',
                     '-map', '[aout]',
                     '-c:v', 'copy',

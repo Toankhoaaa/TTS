@@ -777,26 +777,13 @@
             </h2>
 
             <div class="form-row">
-                <div class="form-group">
-                    <label for="sourceLang">Ngôn ngữ nguồn</label>
+                <!-- Ngôn ngữ cố định: tự động nhận diện → tiếng Việt -->
+                <div class="form-group" style="display: none;">
                     <select id="sourceLang">
-                        <option value="auto">Tự động nhận diện</option>
-                        <option value="zh">Trung Quốc</option>
-                        <option value="en">Tiếng Anh</option>
-                        <option value="ja">Tiếng Nhật</option>
-                        <option value="ko">Tiếng Hàn</option>
-                        <option value="fr">Tiếng Pháp</option>
-                        <option value="de">Tiếng Đức</option>
-                        <option value="es">Tiếng Tây Ban Nha</option>
+                        <option value="auto" selected>Tự động nhận diện</option>
                     </select>
-                </div>
-                <div class="form-group">
-                    <label for="targetLang">Ngôn ngữ phụ đề</label>
                     <select id="targetLang">
                         <option value="vi" selected>Tiếng Việt</option>
-                        <option value="en">Tiếng Anh</option>
-                        <option value="zh">Trung Quốc</option>
-                        <option value="ja">Tiếng Nhật</option>
                     </select>
                 </div>
             </div>
