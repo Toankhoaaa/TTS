@@ -472,7 +472,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
                     '-i', str(base_audio),
                     '-i', str(voiceover_path),
                     '-filter_complex',
-                    f'[1:a]volume=0.15[orig];[2:a]volume={voiceover_volume}[voiced];[orig][voiced]amix=inputs=2:duration=longest[aout]',
+                    f'[1:a]volume=0.05[orig];[2:a]volume=1.2[voiced];[orig][voiced]amix=inputs=2:duration=longest[aout]',
                     '-map', '0:v',
                     '-map', '[aout]',
                     '-c:v', 'copy',
