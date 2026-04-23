@@ -1,0 +1,33 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Data
+data/
+*.mp4
+*.mp3
+*.srt
+*.wav
+*.m4a
+
+# Docker
+.dockerignore
+
+# Model cache
+models/
+.cache/

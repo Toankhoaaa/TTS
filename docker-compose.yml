@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  media-service:
+    build:
+      context: ./media-service
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    volumes:
+      - media_data:/app/data
+      - /tmp:/tmp
+    environment:
+      - MEDIA_DIR=/app/data
+      - MAX_CONCURRENT_JOBS=2
+      - WHISPER_MODEL=medium
+      - LOG_LEVEL=INFO
+    shm_size: '2gb'
+    restart: unless-stopped
+
+  crawler-service:
+    build:
+      context: ./crawler-service
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8002"
+    volumes:
+      - media_data:/app/data
+    environment:
+      - MEDIA_DIR=/app/data
+      - CRAWLER_PORT=8002
+    restart: unless-stopped
+
+  job-service:
+    build:
+      context: ./job-service
+      dockerfile: Dockerfile
+    ports:
+      - "8003:8003"
+    volumes:
+      - media_data:/app/data
+    environment:
+      - MEDIA_DIR=/app/data
+      - JOB_PORT=8003
+      - MEDIA_SERVICE_URL=http://media-service:8001
+      - CRAWLER_SERVICE_URL=http://crawler-service:8002
+    restart: unless-stopped
+
+volumes:
+  media_data:

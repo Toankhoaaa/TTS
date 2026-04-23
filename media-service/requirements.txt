@@ -1,0 +1,22 @@
+fastapi==0.109.2
+uvicorn[standard]==0.27.1
+python-multipart==0.0.9
+pydantic==2.6.1
+pydantic-settings==2.1.0
+aiofiles==23.2.1
+
+# STT
+faster-whisper==1.0.3
+
+# Translate
+deep-translator==1.11.4
+
+# TTS
+edge-tts==6.1.10
+
+# Video/Audio processing
+pillow==10.2.0
+
+# Utilities
+httpx==0.26.0
+python-dotenv==1.0.1
