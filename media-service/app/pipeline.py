@@ -315,19 +315,6 @@ class PipelineProcessor:
                 raise Exception("Failed to extract original audio")
             result.audio_path = audio_path
 
-            # Convert to TranslatedSegment format
-            from app.translate import TranslatedSegment
-            translated_segments = [
-                TranslatedSegment(
-                    index=seg.index,
-                    start=seg.start,
-                    end=seg.end,
-                    original=seg.text,
-                    translated=seg.text  # Already Vietnamese
-                )
-                for seg in segments
-            ]
-
             # Save as subtitle (vietsub is both original and translated)
             subtitle_path = job_dir / f"subtitle_{job_id}.srt"
             translated_path = job_dir / f"translated_{job_id}.srt"
